@@ -13,7 +13,11 @@ while 1:
         clientSocket.sendto(message.encode("UTF-8"),(serverName, serverPort))
         modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
         print (modifiedMessage.decode("UTF-8"))
-    if comando == "pwd":
+    elif comando == "ls":
+        clientSocket.sendto(comando.encode("UTF-8"),(serverName, serverPort))
+        modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
+        print (modifiedMessage.decode("UTF-8"))
+    elif comando == "pwd":
         clientSocket.sendto(comando.encode("UTF-8"),(serverName, serverPort))
         modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
         print (modifiedMessage.decode("UTF-8"))
