@@ -21,8 +21,14 @@ while 1:
         clientSocket.sendto(comando.encode("UTF-8"),(serverName, serverPort))
         modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
         print (modifiedMessage.decode("UTF-8"))
+    elif comando.startswith("cd "):     # Verifica se o início da minha string contém "cd "
+        clientSocket.sendto(comando.encode("UTF-8"),(serverName, serverPort))
+        modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
+        print (modifiedMessage.decode("UTF-8"))
     else:
         break
 
 
 clientSocket.close()
+
+# python UDPClient.py
