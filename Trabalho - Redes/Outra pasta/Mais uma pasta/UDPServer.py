@@ -21,6 +21,31 @@ while 1:
                         modifiedMessage = ("Diretório alterado para: " + os.getcwd()).encode("UTF-8")
                 except FileNotFoundError:
                         modifiedMessage = "Caminho inválido ou diretório não encontrado.".encode("UTF-8")
+        elif message.startswith("scp "):
+                nome_arq = message[4:]
+                if os.path.exists(nome_arq):
+                        # Enviando o nome do arquivo
+                        modifiedMessage = nome_arq.encode("UTF-8") 
+                        serverSocket.sendto(modifiedMessage, clientAddress)
+                       
+                        # Volta pro servidor com uma mensagem desnecessária para enviar o tam do arquivo
+                        message, clientAddress = serverSocket.recvfrom(2048)
+                        message = message.decode("UTF-8")
+                        
+                        # Enviando o tamanho do arquivo
+                        tam_arquivo = os.path.getsize(nome_arq)
+                        modifiedMessage = str(tam_arquivo).encode("UTF-8")      # Transformando em string antes de codificar
+                        serverSocket.sendto(modifiedMessage, clientAddress)
+
+                        # Abre o arquivo como leitura
+                        with open(nome_arq, 'rb') as file:
+                                while tam_arquivo > 0:
+                                        byte = file.read(1)
+                                        tam_arquivo -= 1
+                                        modifiedMessage = byte
+                                        serverSocket.sendto(modifiedMessage, clientAddress)
+                else:
+                        modifiedMessage = "null".encode("UTF-8")
         else:
                 modifiedMessage = message.upper().encode("UTF-8")
         serverSocket.sendto(modifiedMessage, clientAddress)
