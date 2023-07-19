@@ -27,10 +27,6 @@ while 1:
                         # Enviando o nome do arquivo
                         modifiedMessage = nome_arq.encode("UTF-8") 
                         serverSocket.sendto(modifiedMessage, clientAddress)
-                       
-                        # Volta pro servidor com uma mensagem desnecessária para enviar o tam do arquivo
-                        message, clientAddress = serverSocket.recvfrom(2048)
-                        message = message.decode("UTF-8")
                         
                         # Enviando o tamanho do arquivo
                         tam_arquivo = os.path.getsize(nome_arq)
@@ -42,8 +38,10 @@ while 1:
                                 while tam_arquivo > 0:
                                         byte = file.read(1)
                                         tam_arquivo -= 1
-                                        modifiedMessage = byte
-                                        serverSocket.sendto(modifiedMessage, clientAddress)
+                                        serverSocket.sendto(byte, clientAddress)
+                        
+                        # Aguarda o próximo comando ou fechamento da conexão
+                        continue
                 else:
                         modifiedMessage = "null".encode("UTF-8")
         else:

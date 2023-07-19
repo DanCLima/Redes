@@ -7,7 +7,7 @@ clientSocket = socket(AF_INET, SOCK_DGRAM)
 comando = 1
 
 while 1:
-    comando = input("Digite um comando válido: ")
+    comando = input("Insira um comando: ")
     if comando == "upper":
         message = input('Input lowercase sentence: ')
         clientSocket.sendto(message.encode("UTF-8"),(serverName, serverPort))
@@ -35,11 +35,8 @@ while 1:
             nome_arq = modifiedMessage.decode("UTF-8")
             print("Nome do arquivo: " + nome_arq)
 
-            # Volta para o servidor buscar o tamanho do arquivo
-            clientSocket.sendto(comando.encode("UTF-8"),(serverName, serverPort))
-            modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
-
             # Recebe o tamanho do arquivo
+            modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
             tam_arquivo = modifiedMessage.decode("UTF-8")
             tam_arquivo = int(tam_arquivo)  # Convertendo de string para inteiro
             print("Tamanho do arquivo: ", tam_arquivo)
@@ -47,7 +44,6 @@ while 1:
             with open(nome_arq, 'wb') as file:
                 while tam_arquivo > 0:
                     # Vai buscar os dados do arquivo
-                    # clientSocket.sendto(comando.encode("UTF-8"),(serverName, serverPort))
                     byte, serverAddress = clientSocket.recvfrom(1)
 
                     # Escreve no arquivo
@@ -62,4 +58,8 @@ while 1:
 
 clientSocket.close()
 
-# python UDPClient.py
+# Problemas
+# Permissão negada ao tentar baixar pasta
+# O que deve ser informado no scp é o caminho e não o nome
+# Quando da scp e dps qlq outro comando dá problema (resolvido)
+# Ao fazer um download de um arquivo com o msm nome ele fica corrompido
