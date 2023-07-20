@@ -36,14 +36,22 @@ while 1:
                         # Abre o arquivo como leitura
                         with open(nome_arq, 'rb') as file:
                                 while tam_arquivo > 0:
-                                        byte = file.read(1)
-                                        tam_arquivo -= 1
-                                        serverSocket.sendto(byte, clientAddress)
+                                        tam_buffer = 1024 if tam_arquivo >= 1024 else tam_arquivo
+
+                                        # Lê os dados do arquivo
+                                        dados = file.read(tam_buffer)
+                                        tam_arquivo -= len(dados)
+
+                                        # Envia os dados para o client
+                                        serverSocket.sendto(dados, clientAddress)
+
+                                        # Recebe a confirmação de recebimento do ACK
+                                        serverSocket.recvfrom(1024)
                         
                         # Aguarda o próximo comando ou fechamento da conexão
                         continue
                 else:
                         modifiedMessage = "null".encode("UTF-8")
         else:
-                modifiedMessage = message.upper().encode("UTF-8")
+                break
         serverSocket.sendto(modifiedMessage, clientAddress)
