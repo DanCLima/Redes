@@ -1,7 +1,7 @@
 import os
 from socket import *
 
-serverName = 'localhost'  # Usar 'localhost' se estiver na mesma máquina com Windows ou o IP do servidor se estiver em 2 computadores
+serverName = 'localhost'  
 serverPort = 12000
 clientSocket = socket(AF_INET, SOCK_STREAM)
 clientSocket.connect((serverName, serverPort))

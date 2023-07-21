@@ -16,9 +16,6 @@ while 1:
         message = connectionSocket.recv(2048)
         message = message.decode("UTF-8")
 
-        if not message:
-            break
-
         if message == "ls":
             message = os.listdir()  # Obtém uma lista de nomes de todos os arquivos e diretórios
             modifiedMessage = "\n".join(message).encode("UTF-8")  # Transforma a lista de nomes de arquivos em uma única string separada por quebra de linhas
@@ -41,6 +38,7 @@ while 1:
                 # Enviando o tamanho do arquivo
                 tam_arquivo = os.path.getsize(nome_arq)
                 modifiedMessage = str(tam_arquivo).encode("UTF-8")  # Transformando em string antes de codificar
+                print(modifiedMessage)
                 connectionSocket.send(modifiedMessage)
 
                 # Abre o arquivo como leitura
